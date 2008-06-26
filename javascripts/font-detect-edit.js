@@ -1,6 +1,6 @@
 var fontDetectEdit = {  
   
-  addText: function(text, size, family) {
+  addText: function(text, size, family, append) {
     var wrapper = document.createElement("div");
     
     var node = document.createElement("p");        
@@ -16,13 +16,14 @@ var fontDetectEdit = {
     $(wrapper).append(nameNode);  
     
     $(wrapper).click(function() { $(this).remove(); return false; });
-    $("#content").prepend(wrapper);
+    if (append) $("#content").append(wrapper);
+    else $("#content").prepend(wrapper);
   },
   
   addAll: function(text, size) {
     if (this.fonts) {
       for(var i = 0; i < this.fonts.length; i++) {
-        this.addText(text, size, this.fonts[i].fontName);
+        this.addText(text, size, this.fonts[i].fontName, true);
       }
     }
   },
