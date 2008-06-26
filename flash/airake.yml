@@ -1,0 +1,7 @@
+---
+swf_path: FontList.swf
+src_dirs: [ 'src' ]
+target_file: src/FontList.as
+
+development:
+  debug: true

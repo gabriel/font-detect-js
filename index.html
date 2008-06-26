@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>Font Detect</title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/reset/reset-min.css"> 
+  <link rel="stylesheet" type="text/css" href="stylesheets/font-detect.css" />  
+  <link rel="stylesheet" type="text/css" media="print" href="stylesheets/font-detect-print.css" />
+</head>
+<body>
+  
+  <div id="content">            
+    <div class="noprint">
+      <p id="status"><span>Checking Flash version...</span> &#151; <a href="edit.html">Edit</a></p>
+    </div>
+  </div>
+
+  <div id="font-detect-swf"></div>
+  
+  <script src="http://www.google.com/jsapi"></script>
+  <script src="javascripts/swfobject.js"></script>
+  <script src="javascripts/font-detect.js"></script>  
+  <script>
+    google.load("jquery", "1");
+    google.setOnLoadCallback(function() { 
+      
+      // Check Flash version
+      if (!swfobject.hasFlashPlayerVersion("9.0.0"))
+        $("#status span").html("You don't have a compatible version of Flash installed?");
+      else
+        $("#status span").html("Loading... (this may beach ball your browser for ~10 seconds)")
+      
+      fontDetect.loadSWF("font-detect-swf", function(fonts) {
+        $("#status span").html("Loaded " + fonts.length + " fonts");
+        
+        var text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        var size = "32px";
+        
+        for(var i = 0; i < fonts.length; i++) {
+          var node = document.createElement("p");        
+          $(node).css("font-family", "'" + fonts[i].fontName + "'");
+          $(node).css("font-size", size);
+          $(node).addClass("sample-text");
+          $(node).html(text);
+          $("#content").append(node);
+
+          var nameNode = document.createElement("p");
+          $(nameNode).addClass("sample-text-name");
+          $(nameNode).html("[" + fonts[i].fontName + "]");
+          $("#content").append(nameNode);
+        }
+      });
+    });    
+    
+  </script>
+</body>
+</html>

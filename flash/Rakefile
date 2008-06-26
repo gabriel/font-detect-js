@@ -1,0 +1,7 @@
+require 'rubygems'
+require 'airake'
+
+ENV["AIRAKE_ROOT"] = File.dirname(__FILE__)
+
+task :compile => "flash:compile" do; end
+task :clean => "flash:clean" do; end

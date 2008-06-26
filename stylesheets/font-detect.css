@@ -1,0 +1,29 @@
+body { 
+  font-family: "Lucida Grande", Lucida, Helvetica, Arial, Verdana, sans-serif;
+  font-size: 12px;
+  background-color: white;
+  color: black;  
+  margin: 0px auto;
+  text-align: center;
+  width: 900px;
+  padding-top: 10px;
+}
+
+p {
+  text-align: left;
+}
+
+p.sample-text {
+  border: 2px solid #FFF;
+  cursor: pointer;
+  padding: 10px 0;
+}
+
+p.sample-text-name {
+  position: relative;
+  top: -14px;
+  left: 0px;
+  width: 100%;  
+  font-family: Monaco, sans-serif;
+  font-size: 12px;
+}

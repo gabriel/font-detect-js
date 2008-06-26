@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>Font Detect (Edit)</title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/reset/reset-min.css"> 
+  <link rel="stylesheet" type="text/css" href="stylesheets/font-detect-edit.css" />  
+  <link rel="stylesheet" type="text/css" media="print" href="stylesheets/font-detect-print.css" />
+</head>
+<body>
+  
+  <div id="forms" class="noprint">
+
+    <form id="font-text-set">
+      <label for="font-text" class="col">text: </label>
+      <textarea id="font-text" cols="40" rows="5">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+
+      <label for="font-size" class="col"> font-size: </label>
+      <input id="font-size" type="text" value="32px" size="5"/>
+      <input type="submit" value="Set" />
+    </form>
+  
+    <form>
+      <label for="font-family" class="col">font-family: </label>
+      <select id="font-family">
+        <option value="---">---</option>        
+      </select>
+      <input id="font-family-list" type="submit" value="Load font list" />      
+      <span id="font-detect-swf"></span>
+      <p id="status">&nbsp;</p>
+    </form>
+
+    <form>
+      <label class="col">&nbsp;</label>
+      <input id="text-add" type="submit" value="Add text" />
+      <input id="text-clear" type="submit" value="Clear" />      
+      <input id="text-load-all" type="submit" value="Add all fonts" />      
+    </form>    
+    
+    <br class="clear" />
+  </div>
+  
+  <div id="content">            
+    
+  </div>
+
+  <script src="http://www.google.com/jsapi"></script>
+  <script src="javascripts/font-detect.js"></script>
+  <script src="javascripts/font-detect-edit.js"></script>
+  <script src="javascripts/swfobject.js"></script>
+  <script>
+    google.load("jquery", "1");
+    google.setOnLoadCallback(function() { 
+      
+      $("#font-text-set").bind("submit", function(e) { 
+        fontDetectEdit.updateText($("#font-text").val(), $("#font-size").val()); 
+        return false;
+      });
+      
+      $("#font-family-list").click(function(e) {
+        $("#status").html("Loading SWF...");
+        fontDetect.loadSWF("font-detect-swf", fontDetectCallback);
+        return false;
+      });
+      
+      $("#text-clear").click(function(e) {
+        fontDetectEdit.clearText(); 
+        return false;
+      });
+      
+      $("#text-add").click(function(e) {
+        fontDetectEdit.addText($('#font-text').val(), $('#font-size').val(), $('#font-family').val()); 
+        return false;
+      });
+      
+      $("#text-load-all").click(function(e) {
+        fontDetectEdit.clearText(); 
+        fontDetectEdit.addAll($('#font-text').val(), $('#font-size').val()); 
+        return false;
+      });
+      
+    });    
+    
+  </script>
+</body>
+</html>

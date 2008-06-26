@@ -1,0 +1,1 @@
+This code uses flash to detect system fonts and then detects via javascript in the browser which fonts will actually render.
