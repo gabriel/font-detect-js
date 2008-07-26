@@ -28,7 +28,9 @@
       else
         $("#status span").html("Loading... (this may beach ball your browser for ~10 seconds)")
       
-      fontDetect.loadSWF("font-detect-swf", function(fonts) {
+      FontDetect.loadSWF("font-detect-swf");
+      
+      
         $("#status span").html("Loaded " + fonts.length + " fonts");
         
         var text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";

@@ -43,9 +43,9 @@
   </div>
 
   <script src="http://www.google.com/jsapi"></script>
+  <script src="javascripts/swfobject.js"></script>
   <script src="javascripts/font-detect.js"></script>
   <script src="javascripts/font-detect-edit.js"></script>
-  <script src="javascripts/swfobject.js"></script>
   <script>
     google.load("jquery", "1");
     google.setOnLoadCallback(function() { 
@@ -57,7 +57,13 @@
       
       $("#font-family-list").click(function(e) {
         $("#status").html("Loading SWF...");
-        fontDetect.loadSWF("font-detect-swf", fontDetectCallback);
+        var fontDetect = newFontDetect("font-detect-swf");
+        fontDetect.loadSWF();
+        var fonts = fontDetect.fonts();
+                
+        var editFontDetect = newEditFontDetect();
+        editFontDetect.setFonts(fonts);
+        editFontDetect.updateSelect(fonts);
         return false;
       });
       

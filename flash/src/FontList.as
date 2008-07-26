@@ -4,29 +4,30 @@ package {
   import flash.display.LoaderInfo;
   import flash.text.Font;
   import flash.external.ExternalInterface;  
-      
+  
   public class FontList extends Sprite {
     
     public function FontList() {      
-      var params:Object = loadParams();
-      loadFonts(params.callback);
+      ExternalInterface.marshallExceptions = true;
+      ExternalInterface.addCallback("fontsAsJSON", fontsAsJSON);
+      ExternalInterface.addCallback("fontsWithCallback", fontsWithCallback);
     }    
     
-    public function loadParams():Object {
-      return LoaderInfo(this.root.loaderInfo).parameters;
-    }
-    
-    public function fontsToJSON(fonts:Array):Array {
-      return fonts.map(function(font:*, index:int, arr:Array):String {
+    // Use corelib JSON encoding for something generic
+    private function fontsToJSON(fonts:Array):String {
+      var items:Array = fonts.map(function(font:*, index:int, arr:Array):String {
         return "{ fontName:'" + font.fontName + "', fontStyle:'" + font.fontStyle + "', fontType:'" + font.fontType + "'}";
       });
+      return "[" + items.join(",") + "]"
     }
     
-    public function loadFonts(callbackName:String):void {
-      var fonts:Array = fontsToJSON(Font.enumerateFonts(true).sortOn("fontName", Array.CASEINSENSITIVE));      
-      if (ExternalInterface.available) {  
-        ExternalInterface.call(callbackName, "[" + (fonts.join(",")) + "]");  
-      }
+    public function fontsAsJSON():String {
+      return fontsToJSON(Font.enumerateFonts(true).sortOn("fontName", Array.CASEINSENSITIVE));            
+    }
+    
+    public function fontsWithCallback(callback:String):void {
+      if (ExternalInterface.available)  
+        ExternalInterface.call(callback, fontsAsJSON());
     }
     
   }
