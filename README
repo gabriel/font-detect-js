@@ -3,6 +3,7 @@ This code uses flash to detect system fonts and then detects via javascript in t
 View a demo at: http://font-detect.s3.amazonaws.com/index.html
 
 
+<!-- element for SWF to load into -->
 <div id="font-detect-swf"></div>
 
 <script src="javascripts/jquery-1.2.6.pack.js"></script>
@@ -14,7 +15,7 @@ View a demo at: http://font-detect.s3.amazonaws.com/index.html
     var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
       var fonts = fontDetect.fonts();
         
-      // Do something with fonts
+      // Do something with fonts, which look like: [ { fontName:'Arial', fontStyle:'regular' fontType:'device' }, .... ]
       // for(var i = 0; i < fonts.length; i++) {
       //   var name = fonts[i].fontName;
       // }
