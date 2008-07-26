@@ -1,3 +1,24 @@
 This code uses flash to detect system fonts and then detects via javascript in the browser which fonts will actually render.
 
 View a demo at: http://font-detect.s3.amazonaws.com/index.html
+
+
+<div id="font-detect-swf"></div>
+
+<script src="javascripts/jquery-1.2.6.pack.js"></script>
+<script src="javascripts/swfobject.js"></script>
+<script src="javascripts/font-detect.js"></script>  
+<script>
+  $(document).ready(function() {
+    
+    var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
+      var fonts = fontDetect.fonts();
+        
+      // Do something with fonts
+      // for(var i = 0; i < fonts.length; i++) {
+      //   var name = fonts[i].fontName;
+      // }
+    };
+    
+  });
+</script>
