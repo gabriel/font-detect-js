@@ -7,29 +7,25 @@ package {
   
   public class FontList extends Sprite {
     
-    public function FontList() {      
-      ExternalInterface.marshallExceptions = true;
-      ExternalInterface.addCallback("fontsAsJSON", fontsAsJSON);
-      ExternalInterface.addCallback("fontsWithCallback", fontsWithCallback);
+    public function FontList() {   
+      var params:Object = loadParams();
+      loadExternalInterface(params);
     }    
     
-    // Use corelib JSON encoding for something generic
-    private function fontsToJSON(fonts:Array):String {
-      var items:Array = fonts.map(function(font:*, index:int, arr:Array):String {
-        return "{ fontName:'" + font.fontName + "', fontStyle:'" + font.fontStyle + "', fontType:'" + font.fontType + "'}";
-      });
-      return "[" + items.join(",") + "]"
+    private function loadParams():Object {
+      return LoaderInfo(this.root.loaderInfo).parameters;
     }
     
-    public function fontsAsJSON():String {
-      return fontsToJSON(Font.enumerateFonts(true).sortOn("fontName", Array.CASEINSENSITIVE));            
+    private function loadExternalInterface(params:Object):void {
+      ExternalInterface.marshallExceptions = true;
+      ExternalInterface.addCallback("fonts", fonts);      
+      ExternalInterface.call(params.onReady, params.swfObjectId);
     }
     
-    public function fontsWithCallback(callback:String):void {
-      if (ExternalInterface.available)  
-        ExternalInterface.call(callback, fontsAsJSON());
+    public function fonts():Array {
+      return Font.enumerateFonts(true).sortOn("fontName", Array.CASEINSENSITIVE);
     }
-    
+        
   }
   
 }

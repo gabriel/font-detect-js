@@ -23,8 +23,7 @@
       <select id="font-family">
         <option value="---">---</option>        
       </select>
-      <input id="font-family-list" type="submit" value="Load font list" />      
-      <span id="font-detect-swf"></span>
+      <input id="font-family-list" type="submit" value="Load font list" />            
       <p id="status">&nbsp;</p>
     </form>
 
@@ -35,6 +34,7 @@
       <input id="text-load-all" type="submit" value="Add all fonts" />      
     </form>    
     
+    <div style="display:none" id="font-detect-swf"></div>
     <br class="clear" />
   </div>
   
@@ -42,44 +42,45 @@
     
   </div>
 
-  <script src="http://www.google.com/jsapi"></script>
+  <script src="javascripts/jquery-1.2.6.pack.js"></script>
   <script src="javascripts/swfobject.js"></script>
   <script src="javascripts/font-detect.js"></script>
   <script src="javascripts/font-detect-edit.js"></script>
   <script>
-    google.load("jquery", "1");
-    google.setOnLoadCallback(function() { 
+    $(document).ready(function() {
+      
+      var editFontDetect = newEditFontDetect();
       
       $("#font-text-set").bind("submit", function(e) { 
-        fontDetectEdit.updateText($("#font-text").val(), $("#font-size").val()); 
+        newEditFontDetect().updateText($("#font-text").val(), $("#font-size").val()); 
         return false;
       });
       
       $("#font-family-list").click(function(e) {
         $("#status").html("Loading SWF...");
-        var fontDetect = newFontDetect("font-detect-swf");
-        fontDetect.loadSWF();
-        var fonts = fontDetect.fonts();
-                
-        var editFontDetect = newEditFontDetect();
-        editFontDetect.setFonts(fonts);
-        editFontDetect.updateSelect(fonts);
+        
+        var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
+          var fonts = fontDetect.fonts();
+
+          editFontDetect.setFonts(fonts);
+          editFontDetect.updateSelect(fonts);
+        });
         return false;
-      });
-      
+      });      
+            
       $("#text-clear").click(function(e) {
-        fontDetectEdit.clearText(); 
+        editFontDetect.clearText(); 
         return false;
       });
       
       $("#text-add").click(function(e) {
-        fontDetectEdit.addText($('#font-text').val(), $('#font-size').val(), $('#font-family').val(), false); 
+        editFontDetect.addText($('#font-text').val(), $('#font-size').val(), $('#font-family').val(), false); 
         return false;
       });
       
       $("#text-load-all").click(function(e) {
-        fontDetectEdit.clearText(); 
-        fontDetectEdit.addAll($('#font-text').val(), $('#font-size').val()); 
+        editFontDetect.clearText(); 
+        editFontDetect.addAll($('#font-text').val(), $('#font-size').val()); 
         return false;
       });
       

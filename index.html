@@ -15,12 +15,11 @@
 
   <div id="font-detect-swf"></div>
   
-  <script src="http://www.google.com/jsapi"></script>
+  <script src="javascripts/jquery-1.2.6.pack.js"></script>
   <script src="javascripts/swfobject.js"></script>
   <script src="javascripts/font-detect.js"></script>  
   <script>
-    google.load("jquery", "1");
-    google.setOnLoadCallback(function() { 
+    $(document).ready(function() {
       
       // Check Flash version
       if (!swfobject.hasFlashPlayerVersion("9.0.0"))
@@ -28,28 +27,29 @@
       else
         $("#status span").html("Loading... (this may beach ball your browser for ~10 seconds)")
       
-      FontDetect.loadSWF("font-detect-swf");
-      
-      
-        $("#status span").html("Loaded " + fonts.length + " fonts");
+        var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
+          var fonts = fontDetect.fonts();
+            
+          $("#status span").html("Loaded " + fonts.length + " fonts");
         
-        var text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-        var size = "32px";
+          var text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+          var size = "32px";
         
-        for(var i = 0; i < fonts.length; i++) {
-          var node = document.createElement("p");        
-          $(node).css("font-family", "'" + fonts[i].fontName + "'");
-          $(node).css("font-size", size);
-          $(node).addClass("sample-text");
-          $(node).html(text);
-          $("#content").append(node);
+          for(var i = 0; i < fonts.length; i++) {
+            var node = document.createElement("p");        
+            $(node).css("font-family", "'" + fonts[i].fontName + "'");
+            $(node).css("font-size", size);
+            $(node).addClass("sample-text");
+            $(node).html(text);
+            $("#content").append(node);
 
-          var nameNode = document.createElement("p");
-          $(nameNode).addClass("sample-text-name");
-          $(nameNode).html("[" + fonts[i].fontName + "]");
-          $("#content").append(nameNode);
-        }
+            var nameNode = document.createElement("p");
+            $(nameNode).addClass("sample-text-name");
+            $(nameNode).html("[" + fonts[i].fontName + "]");
+            $("#content").append(nameNode);
+          }
       });
+      
     });    
     
   </script>

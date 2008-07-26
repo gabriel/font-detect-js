@@ -3,22 +3,35 @@
  *
  * @author Gabriel Handford
  * @website http://rel.me
+ * 
+ * @see http://www.lalit.org/lab/javascript-css-font-detect
  */
 
-var newFontDetect = function(swfId) {
+// Callback for Flash
+var onFontDetectReady = function(swfObjectId) {
+  var swfObj = document.getElementById(swfObjectId);
+  swfObj.onFontDetectReady();
+  swfObj.onFontDetectReady = null;
+};
+
+var newFontDetect = function(swfId, swfLocation, onReady) {
   
   var _swfId = swfId;
-  var _swfObjectId = swfId + "-object";
+  var _swfObjectId = swfId;
   var _fallbackWidthCache = null;
     
-  // Load SWF
   var _loadSWF = function() {
-    var flashvars = { };
+    var flashvars = { onReady: "onFontDetectReady", swfObjectId: _swfObjectId };
     var params = { allowScriptAccess: "always", menu: "false" };
-    var attributes = { id: _swfObjectId };
-    console.log("Load swf: " +  _swfId);
-    swfobject.embedSWF("flash/FontList.swf", _swfId, "1", "1", "9.0.0", false, flashvars, params, attributes);  
+    var attributes = { id: _swfObjectId, name: _swfObjectId };
+    swfobject.embedSWF(swfLocation, _swfId, "1", "1", "9.0.0", false, flashvars, params, attributes);
+    
+    // Attach onReady to element
+    document.getElementById(_swfObjectId).onFontDetectReady = onReady;
   };
+  
+  // Init
+  _loadSWF();
   
   var _checkOffsetWidth = function(family, size) {
     var node = document.createElement("p");        
@@ -26,6 +39,8 @@ var newFontDetect = function(swfId) {
     $(node).css("font-size", size);
     $(node).css("display", "inline");
     $(node).addClass("font-test")
+    
+    // This was from http://www.lalit.org/lab/javascript-css-font-detect
     $(node).html("mmmmmmmmml"); // m or w take up max width
     $("body").append(node);
     var width = node.offsetWidth;
@@ -66,19 +81,12 @@ var newFontDetect = function(swfId) {
     },
     
     fonts: function() {
-      //_loadSWF();
-      
       // Use when doing static publishing
       //var swf = swfobject.getObjectById(_swfObjectId);
       
       // Works with dynamic publishing
-      var swf = document.getElementById(_swfObjectId);
-      
-      console.log("Calling actionscript with swfObjectId: " + _swfObjectId + ", method: " + swf.fontsAsJSON);
-      var fontsJSON = swf.fontsAsJSON();     
-      console.log("Got fonts: " + fontsJSON);     
-      var fonts = eval(fontsJSON);
-      console.log("Evaled fonts: " + fonts);
+      var swfObj = document.getElementById(_swfObjectId);
+      var fonts = swfObj.fonts();
       return _filterFonts(fonts);
     }
   }
