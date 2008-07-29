@@ -49,7 +49,7 @@
   <script>
     $(document).ready(function() {
       
-      var editFontDetect = newEditFontDetect();
+      var editFontDetect = new EditFontDetect();
       
       $("#font-text-set").bind("submit", function(e) { 
         newEditFontDetect().updateText($("#font-text").val(), $("#font-size").val()); 
@@ -59,9 +59,8 @@
       $("#font-family-list").click(function(e) {
         $("#status").html("Loading SWF...");
         
-        var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
-          var fonts = fontDetect.fonts();
-
+        var fontDetect = new FontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
+          var fonts = fd.fonts();
           editFontDetect.setFonts(fonts);
           editFontDetect.updateSelect(fonts);
         });

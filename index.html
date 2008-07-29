@@ -27,8 +27,8 @@
       else
         $("#status span").html("Loading... (this may beach ball your browser for ~10 seconds)")
       
-        var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
-          var fonts = fontDetect.fonts();
+        var fontDetect = new FontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
+          var fonts = fd.fonts();
             
           $("#status span").html("Loaded " + fonts.length + " fonts");
         

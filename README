@@ -12,8 +12,8 @@ View a demo at: http://font-detect.s3.amazonaws.com/index.html
 <script>
   $(document).ready(function() {
     
-    var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function() {        
-      var fonts = fontDetect.fonts();
+    var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
+      var fonts = fd.fonts();
         
       // Do something with fonts, which look like: [ { fontName:'Arial', fontStyle:'regular' fontType:'device' }, .... ]
       // for(var i = 0; i < fonts.length; i++) {
