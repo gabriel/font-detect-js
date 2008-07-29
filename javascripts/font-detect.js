@@ -7,33 +7,47 @@
  * @see http://www.lalit.org/lab/javascript-css-font-detect
  */
 
-// Callback for Flash
-var onFontDetectReady = function(swfObjectId) {
-  var swfObj = document.getElementById(swfObjectId);
-  swfObj.onFontDetectReady();
-  swfObj.onFontDetectReady = null;
-};
+var FontDetect = function(swfId, swfLocation, onReady) {
+  this._swfId = swfId;
+  this._swfObjectId = swfId;
+  this._swfLocation = swfLocation;
+  this._onReady = onReady;
+  this._fallbackWidthCache = null;
+  
+  this.loadSWF();
+}
 
-var newFontDetect = function(swfId, swfLocation, onReady) {
-  
-  var _swfId = swfId;
-  var _swfObjectId = swfId;
-  var _fallbackWidthCache = null;
-    
-  var _loadSWF = function() {
-    var flashvars = { onReady: "onFontDetectReady", swfObjectId: _swfObjectId };
-    var params = { allowScriptAccess: "always", menu: "false" };
-    var attributes = { id: _swfObjectId, name: _swfObjectId };
-    swfobject.embedSWF(swfLocation, _swfId, "1", "1", "9.0.0", false, flashvars, params, attributes);
-    
-    // Attach onReady to element
-    document.getElementById(_swfObjectId).onFontDetectReady = onReady;
+var FontDetectGlobal = (function() {
+  var instance = {};
+  return {
+    register: function(id, object) {
+      instance[id] = object;
+    },    
+    remove: function(id) {
+      var object = instance[id];
+      instance[id] = null;
+      return object;
+    }
   };
+})();
+
+FontDetect.prototype = {
   
-  // Init
-  _loadSWF();
+  loadSWF: function() {
+    var flashvars = { onReady: "onFontDetectReady", swfObjectId: this._swfObjectId };
+    var params = { allowScriptAccess: "always", menu: "false" };
+    var attributes = { id: this._swfObjectId, name: this._swfObjectId };
+    swfobject.embedSWF(this._swfLocation, this._swfId, "1", "1", "9.0.0", false, flashvars, params, attributes);    
+    
+    FontDetectGlobal.register(this._swfObjectId, this);
+    
+    $(document).bind('swfLoaded', function(event, id) {
+      var fontDetect = FontDetectGlobal.remove(id);
+      fontDetect._onReady(fontDetect);
+    });
+  },
   
-  var _checkOffsetWidth = function(family, size) {
+  checkOffsetWidth: function(family, size) {
     var node = document.createElement("p");        
     $(node).css("font-family", "'" + family + "', Times New Roman");    
     $(node).css("font-size", size);
@@ -46,49 +60,47 @@ var newFontDetect = function(swfId, swfLocation, onReady) {
     var width = node.offsetWidth;
     $("body p.font-test").remove();
     return width;
-  };
+  },
 
-  var _fallbackWidth = function() {
-    if (!_fallbackWidthCache) _fallbackWidthCache = _checkOffsetWidth("Times New Roman", "120px");
-    return _fallbackWidthCache;
-  };
+  fallbackWidth: function() {
+    if (!this._fallbackWidthCache) this._fallbackWidthCache = this.checkOffsetWidth("Times New Roman", "120px");
+    return this._fallbackWidthCache;
+  },
 
-  var _checkFont = function(family) {
+  checkFont: function(family) {
     // We use Times New Roman as a fallback
     if (family == "Times New Roman") return true;    
   
     // Ignore fonts like: 'Arno Pro Semibold 18pt'
     if (/\d+pt\s*$/.test(family)) return false;
   
-    var familyWidth = _checkOffsetWidth("'" + family + "', Times New Roman", "120px");
-    return (familyWidth != _fallbackWidth());
-  };
+    var familyWidth = this.checkOffsetWidth("'" + family + "', Times New Roman", "120px");
+    return (familyWidth != this.fallbackWidth());
+  },
   
-  var _filterFonts = function(fonts) {
+  filterFonts: function(fonts) {
     var filtered = []; 
     for (var i = 0; i < fonts.length; i++) {
-      var isOk = _checkFont(fonts[i].fontName);
+      var isOk = this.checkFont(fonts[i].fontName);
       if (!isOk) continue;
       filtered.push(fonts[i]);
     }
     return filtered;
-  }
+  },
     
-  return {
-    
-    loadSWF: function() {
-      _loadSWF();
-    },
-    
-    fonts: function() {
-      // Use when doing static publishing
-      //var swf = swfobject.getObjectById(_swfObjectId);
+  fonts: function() {
+    // Use when doing static publishing
+    //var swf = swfobject.getObjectById(this._swfObjectId);
       
-      // Works with dynamic publishing
-      var swfObj = document.getElementById(_swfObjectId);
-      var fonts = swfObj.fonts();
-      return _filterFonts(fonts);
-    }
+    // Works with dynamic publishing
+    var swfElement = document.getElementById(this._swfObjectId);
+    var fonts = swfElement.fonts();
+    return this.filterFonts(fonts);
   }
   
+};
+
+// Callback for Flash
+var onFontDetectReady = function(swfObjectId) {
+  $(document).trigger('swfLoaded', [ swfObjectId ]);
 };
