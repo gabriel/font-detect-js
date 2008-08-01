@@ -1,0 +1,64 @@
+<html>
+<head>
+  <title>Font Detect</title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/reset/reset-min.css"> 
+  <link rel="stylesheet" type="text/css" href="stylesheets/font-detect.css" />  
+  <link rel="stylesheet" type="text/css" media="print" href="stylesheets/font-detect-print.css" />
+</head>
+<body>
+  
+  <div id="content">            
+    <div class="noprint">
+      <p id="status"><span>Checking Flash version...</span> &#151; <a href="edit.html">Edit</a></p>
+    </div>
+  </div>
+
+  <div id="font-detect-swf"></div>
+  
+  <script src="javascripts/prototype-1.6.0.2.js"></script>
+  <script src="javascripts/swfobject.js"></script>
+  <script src="javascripts/font-detect.prototype.js"></script>  
+  <script>
+    document.observe('dom:loaded', function() {
+      
+      // Check Flash version
+      if (!swfobject.hasFlashPlayerVersion("9.0.0"))
+        $$("#status span").first().update("You don't have a compatible version of Flash installed?");
+      else
+        $$("#status span").first().update("Loading... (this may beach ball your browser for ~10 seconds)")
+      
+        var fontDetect = new FontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
+          var fonts = fd.fonts();
+          
+          console.log("Loaded " + fonts.length + " fonts");
+
+          $$("#status span").first().update("Loaded " + fonts.length + " fonts");
+
+          var text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+          var size = "32px";
+        
+          fonts.each(function(font) {
+            var node = document.createElement("p");        
+            Element.extend(node);
+            node.setStyle({
+              'fontFamily': "'" + font.fontName + "'",
+              'fontSize': size
+            });
+            node.addClassName("sample-text");
+            node.update(text);
+            
+            $("content").insert(node);
+
+            var nameNode = document.createElement("p");
+            Element.extend(nameNode);
+            nameNode.addClassName("sample-text-name");
+            nameNode.update("[" + font.fontName + "]");
+            $("content").insert(nameNode);
+          });
+      });
+      
+    });    
+    
+  </script>
+</body>
+</html>
