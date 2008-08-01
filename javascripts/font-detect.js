@@ -80,10 +80,9 @@ FontDetect.prototype = {
   
   filterFonts: function(fonts) {
     var filtered = []; 
-    for (var i = 0; i < fonts.length; i++) {
-      var isOk = this.checkFont(fonts[i].fontName);
-      if (!isOk) continue;
-      filtered.push(fonts[i]);
+    for (var i = 0, length = fonts.length; i < length; i++) {
+      if (this.checkFont(fonts[i].fontName))
+        filtered.push(fonts[i]);
     }
     return filtered;
   },
