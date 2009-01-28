@@ -2,7 +2,7 @@
 
 Uses javascript (jQuery or Prototype) + flash to detect your system fonts.
 
-View a demo at: http://font-detect.s3.amazonaws.com/index.html
+[View a demo](http://font-detect.s3.amazonaws.com/index.html)
 
 ![font-detect.png](http://font-detect.s3.amazonaws.com/font-detect.png)
 
