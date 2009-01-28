@@ -1,4 +1,6 @@
-This code uses flash to detect system fonts and then detects via javascript in the browser which fonts will actually render.
+# font-detect-js
+
+Uses javascript (jQuery or Prototype) + flash to detect your system fonts.
 
 View a demo at: http://font-detect.s3.amazonaws.com/index.html
 
