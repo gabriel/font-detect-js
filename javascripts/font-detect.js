@@ -49,7 +49,7 @@ FontDetect.prototype = {
   
   checkOffsetWidth: function(family, size) {
     var node = document.createElement("p");        
-    $(node).css("font-family", "'" + family + "', Times New Roman");    
+    $(node).css("font-family", family);    
     $(node).css("font-size", size);
     $(node).css("display", "inline");
     $(node).addClass("font-test")
