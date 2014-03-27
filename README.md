@@ -15,14 +15,14 @@ Uses javascript (jQuery or Prototype) + flash to detect your system fonts.
 	<script>
 	  $(document).ready(function() {
    
-	    var fontDetect = newFontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
+	    var fontDetect = new FontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
 	      var fonts = fd.fonts();
        
 	      // Do something with fonts, which look like: [ { fontName:'Arial', fontStyle:'regular' fontType:'device' }, .... ]
 	      // for(var i = 0, length = fonts.length; i < length; i++) {
 	      //   var name = fonts[i].fontName;
 	      // }
-	    };
+	    });
    
 	  });
 	</script>
