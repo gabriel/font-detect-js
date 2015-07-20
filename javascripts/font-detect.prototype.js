@@ -9,12 +9,17 @@
 
 var FontDetect = Class.create({
   
-  initialize: function(swfId, swfLocation, onReady) {
+  initialize: function(swfId, swfLocation, onReady, onCreate) {
     this._swfId = swfId;
     this._swfObjectId = swfId;
     this._swfLocation = swfLocation;
     this._onReady = onReady;
     this._fallbackWidthCache = null;
+    this._onCreate = onCreate;
+  
+    if(!!this._onCreate && swfobject.embedSWF.length<10) {
+      thiswindow.console&&console.log("onCreate is supported since SWFObject 2.2");
+    }
   
     this.loadSWF();
   },
@@ -23,7 +28,7 @@ var FontDetect = Class.create({
     var flashvars = { onReady: "onFontDetectReady", swfObjectId: this._swfObjectId };
     var params = { allowScriptAccess: "always", menu: "false" };
     var attributes = { id: this._swfObjectId, name: this._swfObjectId };
-    swfobject.embedSWF(this._swfLocation, this._swfId, "1", "1", "9.0.0", false, flashvars, params, attributes);    
+    swfobject.embedSWF(this._swfLocation, this._swfId, "1", "1", "9.0.0", false, flashvars, params, attributes, this._onCreate);
     
     FontDetectGlobal.register(this._swfObjectId, this);
   },
