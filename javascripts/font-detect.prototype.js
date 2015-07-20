@@ -16,11 +16,7 @@ var FontDetect = Class.create({
     this._onReady = onReady;
     this._fallbackWidthCache = null;
     this._onCreate = onCreate;
-  
-    if(!!this._onCreate && swfobject.embedSWF.length<10) {
-      this.window.console && console.log("onCreate is supported since SWFObject 2.2");
-    }
-  
+
     this.loadSWF();
   },
   
