@@ -14,7 +14,13 @@ Uses javascript (jQuery or Prototype) + flash to detect your system fonts.
 	<script src="javascripts/font-detect.js"></script>  
 	<script>
 	  $(document).ready(function() {
-   
+	  
+	    var onComplete = function(e) {
+	      //onComplete can be used to defind a callback function that is called on both success or failure of creating a Flash plugin
+	      //see also, https://code.google.com/p/swfobject/wiki/api
+	      //onComplete is supported since SWFObject 2.2
+	    }
+
 	    var fontDetect = new FontDetect("font-detect-swf", "flash/FontList.swf", function(fd) {        
 	      var fonts = fd.fonts();
        
@@ -24,7 +30,7 @@ Uses javascript (jQuery or Prototype) + flash to detect your system fonts.
 	      // }
 	    });
    
-	  });
+	  }, onComplete);
 	</script>
 
 There is also a Prototype version at font-detect.prototype.js
